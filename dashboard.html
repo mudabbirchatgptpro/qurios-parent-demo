@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parent Portal · QuriOS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#faf9f6; --fg:#1c1b19; --muted:#6f6b63; --border:#e4e0d8; --card:#fff; --soft:#f2efe8;
+          --good:#3f7d5a; --goodbg:#e7f2eb; --bad:#b4432f; --badbg:#f8e8e4; --accent:#5b7f6a; --warn:#9a6b12; --warnbg:#fbf1dc; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:Inter,system-ui,sans-serif; font-size:14px; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:0; z-index:5; }
+  header h1 { font-family:'Instrument Serif',serif; font-style:italic; font-weight:400; font-size:26px; margin:0; }
+  header .who { display:flex; align-items:center; gap:12px; color:var(--muted); font-size:13px; }
+  header .av { width:30px; height:30px; border-radius:50%; background:var(--accent); color:#fff; display:grid; place-items:center; font-weight:600; font-size:13px; }
+  header a { color:var(--muted); text-decoration:none; border:1px solid var(--border); border-radius:999px; padding:5px 12px; }
+  .wrap { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:20px; padding:20px 24px; max-width:1280px; margin:0 auto; }
+  @media (max-width:900px) { .wrap { grid-template-columns:1fr; padding:16px; } header { padding:12px 16px; } }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px 18px; }
+  .card h2 { font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin:0 0 12px; font-weight:600; }
+  .col { display:flex; flex-direction:column; gap:16px; min-width:0; }
+  /* chat */
+  .chat { display:flex; flex-direction:column; height:calc(100vh - 110px); min-height:520px; padding:0; }
+  @media (max-width:900px) { .chat { height:70vh; } }
+  .chat-head { padding:14px 18px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+  .chat-head .owl { font-size:22px; }
+  .chat-head b { display:block; font-size:15px; }
+  .chat-head span { color:var(--muted); font-size:12px; }
+  .msgs { flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:12px; }
+  .m { max-width:86%; padding:10px 14px; border-radius:14px; line-height:1.5; white-space:pre-wrap; }
+  .m.bot { background:var(--soft); align-self:flex-start; border-bottom-left-radius:4px; }
+  .m.me { background:var(--fg); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; }
+  .m.typing { color:var(--muted); font-style:italic; }
+  .m .act { margin-top:8px; font-size:12px; color:var(--good); font-weight:600; font-style:normal; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; padding:0 18px 10px; }
+  .chip { border:1px solid var(--border); background:var(--card); border-radius:999px; padding:6px 11px; font:inherit; font-size:12.5px; cursor:pointer; color:var(--fg); }
+  .chip:hover { background:var(--soft); }
+  form.ask { display:flex; gap:8px; padding:12px 18px 16px; border-top:1px solid var(--border); }
+  form.ask input { flex:1; min-width:0; border:1px solid var(--border); border-radius:12px; padding:11px 14px; font:inherit; font-size:15px; }
+  form.ask input:focus { outline:none; border-color:#bdb7ab; }
+  form.ask button { border:0; border-radius:12px; padding:0 18px; background:var(--fg); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+  /* stats */
+  .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .stat b { display:block; font-size:24px; font-weight:600; }
+  .stat span { color:var(--muted); font-size:12px; }
+  .status { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .pill { border-radius:999px; padding:5px 12px; font-size:12.5px; font-weight:600; background:var(--goodbg); color:var(--good); }
+  .pill.focus { background:var(--warnbg); color:var(--warn); }
+  .pill.paused { background:var(--badbg); color:var(--bad); }
+  .btn { border:1px solid var(--border); background:var(--card); border-radius:10px; padding:6px 12px; font:inherit; font-size:12.5px; cursor:pointer; }
+  .btn.primary { background:var(--fg); color:#fff; border-color:var(--fg); }
+  .row { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+  .muted { color:var(--muted); }
+  .course { border:1px dashed #cfc8ba; border-radius:12px; padding:12px 14px; margin-top:10px; }
+  .course.active { border-style:solid; border-color:var(--good); background:var(--goodbg); }
+  .course b { display:block; margin-bottom:4px; }
+  .course ol { margin:6px 0 0; padding-left:18px; color:var(--muted); }
+  .bar { display:grid; grid-template-columns:150px 1fr 38px; align-items:center; gap:10px; margin:7px 0; font-size:13px; }
+  .bar .t { height:8px; border-radius:99px; background:var(--soft); overflow:hidden; }
+  .bar .t i { display:block; height:100%; border-radius:99px; background:var(--accent); }
+  .bar .t i.low { background:#d08a3a; }
+  .bar .v { text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .att { display:flex; gap:10px; padding:9px 0; border-top:1px solid var(--border); align-items:flex-start; }
+  .att:first-child { border-top:0; }
+  .att .ok { width:22px; height:22px; flex:none; border-radius:50%; display:grid; place-items:center; font-size:12px; font-weight:700; }
+  .att .ok.y { background:var(--goodbg); color:var(--good); } .att .ok.n { background:var(--badbg); color:var(--bad); }
+  .att .q { flex:1; min-width:0; }
+  .att .q div:first-child { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .att small { color:var(--muted); }
+  .list { max-height:340px; overflow-y:auto; }
+  .tabs { display:flex; gap:4px; background:var(--soft); border-radius:10px; padding:3px; margin-bottom:12px; width:max-content; }
+  .tab { border:0; background:transparent; border-radius:8px; padding:6px 14px; font:inherit; font-size:13px; cursor:pointer; color:var(--muted); }
+  .tab.on { background:var(--card); color:var(--fg); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+  .skills { display:flex; flex-wrap:wrap; gap:6px; }
+  .skill { border:1px solid var(--border); background:var(--card); border-radius:999px; padding:6px 12px; font:inherit; font-size:13px; cursor:pointer; }
+  .skill.on { background:var(--fg); color:#fff; border-color:var(--fg); }
+  .skill .pc { font-size:11px; opacity:.6; margin-left:4px; }
+  .sample { margin-top:12px; padding:10px 12px; border-radius:10px; background:var(--soft); font-size:13px; line-height:1.5; }
+  .sample b { font-weight:600; }
+  .opts { display:flex; gap:14px; margin-top:12px; font-size:13px; flex-wrap:wrap; }
+  .opts label { display:flex; gap:6px; align-items:center; cursor:pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>QuriOS</h1>
+  <div class="who"><span>Maya's parent</span><div class="av">M</div><a href="/logout">Sign out</a></div>
+</header>
+
+<div class="wrap">
+  <section class="card chat">
+    <div class="chat-head"><div class="owl">🦉</div><div><b>Hoot, Maya's learning coach</b><span>Ask about progress, or tell Hoot what Maya should practice.</span></div></div>
+    <div class="msgs" id="msgs"></div>
+    <div class="chips" id="chips"></div>
+    <form class="ask" id="ask"><input id="q" placeholder="Ask Hoot anything…" autocomplete="off"><button>Send</button></form>
+  </section>
+
+  <div class="col">
+    <section class="card">
+      <h2>This week</h2>
+      <div class="stats">
+        <div class="stat"><b id="s-ans">–</b><span>questions answered</span></div>
+        <div class="stat"><b id="s-acc">–</b><span>correct</span></div>
+        <div class="stat"><b>3h 20m</b><span>play time</span></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Right now</h2>
+      <div class="status"><span id="mode-text"></span><span id="mode-pill" class="pill">Standard mix</span></div>
+      <div class="row" id="mode-actions"></div>
+    </section>
+
+    <section class="card">
+      <h2>Practice plan</h2>
+      <div class="tabs" id="plan-tabs"><button class="tab on" data-subj="maths">Maths</button><button class="tab" data-subj="english">English</button></div>
+      <div class="skills" id="plan-skills"></div>
+      <div class="sample" id="plan-sample">Tap a skill to add it to Maya's plan. You can mix Maths and English.</div>
+      <div class="opts">
+        <label><input type="radio" name="strict" value="mostly" checked> Mostly these (keeps some review)</label>
+        <label><input type="radio" name="strict" value="only"> Only these</label>
+      </div>
+      <div class="row"><button class="btn primary" id="plan-apply">Apply plan</button><button class="btn" id="plan-clear">Clear</button><span class="muted" id="plan-count" style="align-self:center"></span></div>
+    </section>
+
+    <section class="card">
+      <h2>Mini-courses</h2>
+      <div id="courses"></div>
+    </section>
+
+    <section class="card">
+      <h2>Strengths by skill</h2>
+      <div class="tabs" id="bar-tabs"><button class="tab on" data-subj="all">All</button><button class="tab" data-subj="maths">Maths</button><button class="tab" data-subj="english">English</button></div>
+      <div id="bars"></div>
+    </section>
+
+    <section class="card">
+      <h2>Recent answers</h2>
+      <div class="list" id="atts"></div>
+    </section>
+  </div>
+</div>
+
+<script>
+(function () {
+  var A = [], state = { mode: 'standard', focus: [], strict: 'mostly', course: null };
+  var ui = { planSubj: 'maths', barSubj: 'all', sel: [] };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+
+  // Skill catalog. topics = question topic labels that count toward the skill;
+  // keys = words a parent might type; base = [answered, correct] sample history.
+  var SKILLS = [
+    { name: 'Fractions', subj: 'maths', topics: ['Fractions'], keys: ['fraction'], base: [14, 8] },
+    { name: 'Decimals', subj: 'maths', topics: ['Decimals'], keys: ['decimal'], base: [7, 4] },
+    { name: 'Word Problems', subj: 'maths', topics: ['Word Problem'], keys: ['word problem'], base: [9, 6] },
+    { name: 'Multiplication', subj: 'maths', topics: ['Multiplication'], keys: ['multipl', 'times table'], base: [15, 14] },
+    { name: 'Division', subj: 'maths', topics: ['Division'], keys: ['division', 'divid', 'sharing'], base: [8, 6] },
+    { name: 'Place Value', subj: 'maths', topics: ['Place Value'], keys: ['place value'], base: [6, 5] },
+    { name: 'Rounding', subj: 'maths', topics: ['Rounding'], keys: ['rounding', 'round to'], base: [6, 5] },
+    { name: 'Geometry', subj: 'maths', topics: ['Geometry'], keys: ['geometr', 'shape'], base: [11, 9] },
+    { name: 'Perimeter & Area', subj: 'maths', topics: ['Perimeter'], keys: ['perimeter', 'area of', 'area and'], base: [7, 5] },
+    { name: 'Time', subj: 'maths', topics: ['Time'], keys: ['telling time', 'clock', 'elapsed'], base: [6, 4] },
+    { name: 'Money', subj: 'maths', topics: ['Money'], keys: ['money', 'coin'], base: [8, 7] },
+    { name: 'Patterns', subj: 'maths', topics: ['Patterns'], keys: ['pattern', 'sequence'], base: [8, 8] },
+    { name: 'Grammar', subj: 'english', topics: ['Grammar'], keys: ['grammar', 'verb', 'noun', 'tense'], base: [18, 16] },
+    { name: 'Spelling', subj: 'english', topics: ['Spelling'], keys: ['spell'], base: [12, 8] },
+    { name: 'Vocabulary', subj: 'english', topics: ['Vocabulary'], keys: ['vocab', 'word meaning', 'meanings'], base: [22, 20] },
+    { name: 'Synonyms & Antonyms', subj: 'english', topics: [], sampleRe: /SAME|OPPOSITE/, keys: ['synonym', 'antonym', 'opposite'], base: [10, 9] },
+    { name: 'Punctuation', subj: 'english', topics: ['Punctuation'], keys: ['punctuat', 'comma', 'question mark'], base: [9, 8] },
+    { name: 'Reading', subj: 'english', topics: ['Reading'], keys: ['reading', 'comprehension', 'inference'], base: [11, 8] },
+    { name: 'Sentences', subj: 'english', topics: ['Sentences'], keys: ['sentence'], base: [7, 6] },
+    { name: 'Analogies', subj: 'english', topics: ['Analogies'], keys: ['analog'], base: [8, 5] },
+    { name: 'Compound Words', subj: 'english', topics: ['Compound Words'], keys: ['compound'], base: [5, 5] }
+  ];
+  var SUBJ = { maths: 'Maths', english: 'English' };
+  function skill(name) { return SKILLS.filter(function (k) { return k.name === name; })[0]; }
+  function skillAttempts(k) { return A.filter(function (a) { return k.sampleRe ? k.sampleRe.test(a.stem) : k.topics.indexOf(a.topic) !== -1; }); }
+  function pct(k) {
+    var at = k.sampleRe ? [] : skillAttempts(k), n = k.base[0] + at.length, ok = k.base[1] + at.filter(function (a) { return a.correct; }).length;
+    return Math.round(100 * ok / n);
+  }
+  function stats(subj) {
+    return SKILLS.filter(function (k) { return !subj || subj === 'all' || k.subj === subj; })
+      .map(function (k) { return { k: k.name, p: pct(k), subj: k.subj }; })
+      .sort(function (a, b) { return b.p - a.p; });
+  }
+  function weakest(subj) { return stats(subj).slice().reverse().slice(0, 3); }
+  function listText(names) { return names.length <= 1 ? (names[0] || '') : names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1]; }
+
+  function render() {
+    syncPlan();
+    var ans = 142 + A.length, ok = 121 + A.filter(function (a) { return a.correct; }).length;
+    $('s-ans').textContent = ans; $('s-acc').textContent = Math.round(100 * ok / ans) + '%';
+    $('bars').innerHTML = stats(ui.barSubj).slice(0, ui.barSubj === 'all' ? 10 : 12).map(function (t) {
+      return '<div class="bar"><span>' + esc(t.k) + '</span><div class="t"><i class="' + (t.p < 70 ? 'low' : '') + '" style="width:' + t.p + '%"></i></div><span class="v">' + t.p + '%</span></div>';
+    }).join('');
+    $('atts').innerHTML = A.slice(0, 20).map(function (a) {
+      var d = new Date(a.at);
+      return '<div class="att"><div class="ok ' + (a.correct ? 'y">✓' : 'n">✕') + '</div><div class="q"><div>' + esc(a.stem) + '</div><small>' + (a.subject === 'maths' ? 'Maths' : 'English') + ' · ' + esc(a.topic) + ' · during ' + esc(a.game) + ' · ' + d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '</small></div></div>';
+    }).join('');
+    renderPlan(); renderMode(); renderCourses();
+  }
+
+  function renderPlan() {
+    document.querySelectorAll('#plan-tabs .tab').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-subj') === ui.planSubj); });
+    document.querySelectorAll('#bar-tabs .tab').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-subj') === ui.barSubj); });
+    $('plan-skills').innerHTML = SKILLS.filter(function (k) { return k.subj === ui.planSubj; }).map(function (k) {
+      return '<button class="skill' + (ui.sel.indexOf(k.name) !== -1 ? ' on' : '') + '" data-skill="' + esc(k.name) + '">' + esc(k.name) + '<span class="pc">' + pct(k) + '%</span></button>';
+    }).join('');
+    $('plan-count').textContent = ui.sel.length ? ui.sel.length + ' selected' : '';
+  }
+
+  // "Maths" / "English" when the names are exactly one whole subject.
+  function wholeSubject(names) {
+    for (var sj in SUBJ) { var all = SKILLS.filter(function (k) { return k.subj === sj; }).map(function (k) { return k.name; }); if (all.length === names.length && all.every(function (n) { return names.indexOf(n) !== -1; })) return SUBJ[sj]; }
+    return '';
+  }
+  function focusText(names) { var w = wholeSubject(names); return w ? w + ' (all ' + w + ' skills)' : listText(names); }
+  function focusLabel() {
+    var subs = {}; state.focus.forEach(function (n) { subs[skill(n).subj] = 1; });
+    var allOf = Object.keys(subs).filter(function (s) { return SKILLS.filter(function (k) { return k.subj === s; }).every(function (k) { return state.focus.indexOf(k.name) !== -1; }); });
+    if (allOf.length === 1 && Object.keys(subs).length === 1) return SUBJ[allOf[0]];
+    return state.focus.length > 3 ? state.focus.length + ' skills' : state.focus.join(', ');
+  }
+
+  function renderMode() {
+    var pill = $('mode-pill'), text = $('mode-text'), act = $('mode-actions');
+    var back = '<button class="btn" data-do="standard">Back to standard mix</button><button class="btn" data-do="pause">Pause games</button>';
+    if (state.mode === 'paused') { pill.className = 'pill paused'; pill.textContent = 'Games paused'; text.textContent = 'Games are paused. Maya sees a "come back later" screen.'; act.innerHTML = '<button class="btn primary" data-do="resume">Resume games</button>'; }
+    else if (state.mode === 'focus') { pill.className = 'pill focus'; pill.textContent = (state.strict === 'only' ? 'Only: ' : 'Focus: ') + focusLabel(); text.textContent = (state.strict === 'only' ? 'All questions are ' : 'Most questions are ') + focusText(state.focus) + ' until you switch back.'; act.innerHTML = back; }
+    else if (state.mode === 'course') { pill.className = 'pill focus'; pill.textContent = 'Mini-course on'; text.textContent = 'Maya is working through "' + state.course.title + '".'; act.innerHTML = back; }
+    else { pill.className = 'pill'; pill.textContent = 'Standard mix'; text.textContent = 'Maya gets the standard ISEE mix of Maths and English.'; act.innerHTML = '<button class="btn" data-do="pause">Pause games</button>'; }
+  }
+
+  function renderCourses() {
+    var c = state.course, el = $('courses');
+    if (!c) { el.innerHTML = '<div class="muted">No mini-courses yet. Ask Hoot to make one.</div>'; return; }
+    el.innerHTML = '<div class="course ' + (c.status === 'approved' ? 'active' : '') + '"><b>' + esc(c.title) + '</b>' +
+      '<span class="muted">' + (c.status === 'approved' ? 'Approved · live in Maya\'s games now' : 'Proposed by Hoot · waiting for you') + '</span>' +
+      '<ol>' + c.steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>' +
+      (c.status === 'proposed' ? '<div class="row"><button class="btn primary" data-do="approve">Approve</button><button class="btn" data-do="reject">Not now</button></div>' : '') + '</div>';
+  }
+
+  function sampleFor(k) {
+    var at = skillAttempts(k)[0];
+    return at ? '<b>' + esc(k.name) + '</b> · ' + pct(k) + '% correct<br>Sample question: “' + esc(at.stem) + '”' : '<b>' + esc(k.name) + '</b> · ' + pct(k) + '% correct';
+  }
+
+  // ── actions shared by buttons and the coach ──
+  // Push the plan to the server so the arcade demo picks it up at the next game break.
+  var lastPlan = '';
+  function syncPlan() {
+    var topics = [];
+    if (state.mode === 'focus') state.focus.forEach(function (n) { var k = skill(n); if (!k) return; (k.topics.length ? k.topics : ['Vocabulary']).forEach(function (t) { if (topics.indexOf(t) === -1) topics.push(t); }); });
+    var body = JSON.stringify({ mode: state.mode, topics: topics, strict: state.strict });
+    if (body === lastPlan) return; lastPlan = body;
+    fetch('/api/plan', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body }).catch(function () {});
+  }
+  function setFocus(names, strict, quiet) {
+    state.mode = 'focus'; state.focus = names.slice(); state.strict = strict || 'mostly'; ui.sel = names.slice();
+    if (state.course && state.course.status === 'approved') state.course = null;
+    if (!quiet) say('Done. From her next game break, ' + (state.strict === 'only' ? 'all' : 'most') + ' of Maya\'s questions will be ' + focusText(names) + '.' + (state.strict === 'only' ? '' : ' I will keep a few review questions in the mix so nothing slips.') + ' Tell me "back to normal" any time.');
+    render();
+  }
+  function doAction(a) {
+    if (a === 'pause') { state.mode = 'paused'; say('Done. I paused Maya\'s games. She will see a friendly "come back later" screen until you resume.'); }
+    else if (a === 'resume' || a === 'standard') { state.mode = 'standard'; state.focus = []; ui.sel = []; if (state.course && state.course.status === 'approved') state.course = null; say(a === 'resume' ? 'Games are back on. Maya returns to the standard ISEE mix.' : 'Switched back. Maya gets the standard ISEE mix again.'); }
+    else if (a === 'approve') { state.course.status = 'approved'; state.mode = 'course'; say('Approved. "' + state.course.title + '" is live. Maya will see it at her next game break.'); }
+    else if (a === 'reject') { state.course = null; say('No problem, I set that mini-course aside.'); }
+    render();
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-do]'); if (b) { doAction(b.getAttribute('data-do')); return; }
+    var sk = e.target.closest('[data-skill]');
+    if (sk) {
+      var n = sk.getAttribute('data-skill'), i = ui.sel.indexOf(n);
+      if (i === -1) ui.sel.push(n); else ui.sel.splice(i, 1);
+      $('plan-sample').innerHTML = sampleFor(skill(n)); renderPlan(); return;
+    }
+    var tb = e.target.closest('#plan-tabs .tab'); if (tb) { ui.planSubj = tb.getAttribute('data-subj'); renderPlan(); return; }
+    var bt = e.target.closest('#bar-tabs .tab'); if (bt) { ui.barSubj = bt.getAttribute('data-subj'); render(); }
+  });
+  $('plan-apply').onclick = function () {
+    if (!ui.sel.length) { $('plan-sample').textContent = 'Pick at least one skill first.'; return; }
+    var strict = document.querySelector('input[name=strict]:checked').value;
+    add('me', 'Set Maya\'s plan: ' + (strict === 'only' ? 'only ' : 'mostly ') + listText(ui.sel));
+    setFocus(ui.sel, strict);
+  };
+  $('plan-clear').onclick = function () { ui.sel = []; $('plan-sample').textContent = 'Tap a skill to add it to Maya\'s plan. You can mix Maths and English.'; renderPlan(); };
+
+  // ── scripted coach ──
+  function skillsIn(t) { return SKILLS.filter(function (k) { return k.keys.some(function (w) { return t.indexOf(w) !== -1; }); }).map(function (k) { return k.name; }); }
+  function subjIn(t) { return /\bmath|\barithmetic|\bnumber/.test(t) ? 'maths' : /\benglish|\bliteracy|\blanguage/.test(t) ? 'english' : ''; }
+  function subjSkills(s) { return SKILLS.filter(function (k) { return k.subj === s; }).map(function (k) { return k.name; }); }
+
+  function reply(text) {
+    var t = text.toLowerCase(), found = skillsIn(t), subj = subjIn(t);
+    var strict = /\bonly\b|\bjust\b|nothing but/.test(t) ? 'only' : 'mostly';
+    if (/homework/.test(t)) { say('You can set a homework gate: Maya finishes a set of questions you choose before games unlock. Upload a worksheet or tell me the topic and I will turn it into questions.'); return; }
+    if (/pause|block|stop (the )?games|bed ?time|screen time|lock/.test(t)) { doAction('pause'); return; }
+    if (/resume|unpause|turn (them|games) back on|unlock/.test(t)) { doAction('resume'); return; }
+    if (/back to normal|standard|cancel|clear|turn off|go back/.test(t)) { doAction('standard'); return; }
+    if (/\b(what|which)\b.*\b(skills|topics|options|subjects)\b|\blist\b|\boptions\b/.test(t)) {
+      var subs = subj ? [subj] : ['maths', 'english'];
+      say(subs.map(function (s) { return SUBJ[s] + ': ' + subjSkills(s).join(', '); }).join('\n\n') + '\n\nTell me which ones, for example "focus on spelling and grammar" or "maths only". You can also pick them in the Practice plan box.');
+      return;
+    }
+    if (/course|lesson|practice set|week of/.test(t)) {
+      var tp = found[0] || weakest(subj || 'all')[0].k;
+      state.course = { title: tp + ' in 5 short steps', status: 'proposed', steps: ['Warm-up: what ' + tp.toLowerCase() + ' means, with pictures', 'Worked example read aloud by Hoot', '6 guided questions with hints', '6 mixed questions, no hints', 'Quick check: 4 questions to confirm it stuck'] };
+      renderCourses();
+      say('Here is a mini-course on ' + tp + '. It is 5 short steps, about 20 questions spread over her game breaks. It is waiting in the Mini-courses box: tap Approve and it goes live.');
+      return;
+    }
+    if (/weak|struggl|trouble|hard|behind|help with|mistake|wrong/.test(t)) {
+      var w = weakest(subj || 'all');
+      say('Maya\'s three weakest ' + (subj ? SUBJ[subj] + ' ' : '') + 'skills this week:\n• ' + w.map(function (x) { return x.k + ' (' + x.p + '% correct)'; }).join('\n• ') + '\n\nWhen she misses one, I teach the rule, she says it back, and she tries again. Want me to focus her practice on ' + w[0].k.toLowerCase() + '?');
+      return;
+    }
+    if (found.length && /focus|more|work on|practi|only|just|drill|improve|do\b/.test(t)) { setFocus(found, strict); return; }
+    if (subj && /focus|more|work on|practi|only|just/.test(t)) { setFocus(subjSkills(subj), strict); ui.planSubj = subj; renderPlan(); return; }
+    if (found.length === 1 || (subj && /how|doing/.test(t))) {
+      if (found.length === 1) {
+        var k = skill(found[0]), at = skillAttempts(k)[0];
+        say(k.name + ' (' + SUBJ[k.subj] + '): ' + pct(k) + '% correct this week.' + (at ? ' Her latest ' + k.name.toLowerCase() + ' question was "' + at.stem + '", and she got it ' + (at.correct ? 'right.' : 'wrong at first, then fixed it after I explained the rule.') : '') + ' Want me to focus on it?');
+      } else {
+        var st = stats(subj);
+        say('Maya in ' + SUBJ[subj] + ' this week:\nStrongest: ' + st.slice(0, 3).map(function (x) { return x.k + ' ' + x.p + '%'; }).join(', ') + '\nNeeds work: ' + st.slice(-3).reverse().map(function (x) { return x.k + ' ' + x.p + '%'; }).join(', '));
+      }
+      return;
+    }
+    if (/how|doing|progress|summary|week|report|update/.test(t)) {
+      var ok = A.filter(function (a) { return a.correct; }).length, m = stats('maths'), e = stats('english');
+      say('Maya had a strong week. She answered ' + $('s-ans').textContent + ' questions and got ' + $('s-acc').textContent + ' right. Today alone she got ' + ok + ' of ' + A.length + '.\n\nMaths: best at ' + m[0].k + ' (' + m[0].p + '%), needs work on ' + m[m.length - 1].k + ' (' + m[m.length - 1].p + '%).\nEnglish: best at ' + e[0].k + ' (' + e[0].p + '%), needs work on ' + e[e.length - 1].k + ' (' + e[e.length - 1].p + '%).\n\nShe fixes most mistakes on the second try after I explain the rule, which is a great sign.');
+      return;
+    }
+    if (/\bhi\b|hello|hey/.test(t)) { say('Hi! I am Hoot, Maya\'s learning coach. Ask me how she is doing, what she finds hard, or tell me what she should practice.'); return; }
+    say('I can help with that. Try:\n• "How is Maya doing this week?"\n• "How is she doing in English?"\n• "What maths skills can she practice?"\n• "Focus on spelling and grammar"\n• "Maths only"\n• "Make a mini-course on decimals"\n• "Pause her games"');
+  }
+
+  var msgs = $('msgs');
+  function add(cls, text) { var d = document.createElement('div'); d.className = 'm ' + cls; d.textContent = text; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d; }
+  var pending = null;
+  function say(text) {
+    if (pending) { pending.textContent = text; pending.classList.remove('typing'); pending = null; }
+    else add('bot', text);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  function ask(text) {
+    if (!text.trim()) return;
+    add('me', text);
+    pending = add('bot typing', 'Hoot is typing…');
+    setTimeout(function () { reply(text); }, 700 + Math.random() * 500);
+  }
+  $('ask').addEventListener('submit', function (e) { e.preventDefault(); ask($('q').value); $('q').value = ''; });
+  ['How is Maya doing this week?', 'How is she doing in English?', 'What maths skills can she practice?', 'Focus on spelling and grammar', 'Maths only', 'Make a mini-course on fractions', 'Pause her games', 'Back to normal'].forEach(function (c) {
+    var b = document.createElement('button'); b.className = 'chip'; b.textContent = c; b.onclick = function () { ask(c); }; $('chips').appendChild(b);
+  });
+
+  fetch('/attempts.json').then(function (r) { return r.json(); }).then(function (d) {
+    A = d; render();
+    add('bot', 'Good afternoon! Maya played for 25 minutes today and answered ' + A.length + ' questions between games, Maths and English. Ask me anything about her progress.');
+  });
+})();
+</script>
+</body>
+</html>

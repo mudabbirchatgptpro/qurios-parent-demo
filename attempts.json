@@ -1,0 +1,272 @@
+[
+ {
+  "stem": "Which word means the SAME as \"enormous\"?",
+  "topic": "Vocabulary",
+  "subject": "english",
+  "correct": true,
+  "answer": "huge",
+  "game": "Moto X3M",
+  "at": "2026-09-30T16:39"
+ },
+ {
+  "stem": "A baker fills 3 trays. Each tray holds 8 muffins. He sells 9 muffins. How many are left?",
+  "topic": "Word Problem",
+  "subject": "maths",
+  "correct": true,
+  "answer": "15",
+  "game": "Traffic Cop 3D",
+  "at": "2026-09-30T16:33"
+ },
+ {
+  "stem": "Which word means the SAME as \"rapid\"?",
+  "topic": "Vocabulary",
+  "subject": "english",
+  "correct": true,
+  "answer": "fast",
+  "game": "Pottery Master",
+  "at": "2026-09-30T16:22"
+ },
+ {
+  "stem": "Choose the word that best completes the sentence: \"The scientist made an important ____.\"",
+  "topic": "Grammar",
+  "subject": "english",
+  "correct": true,
+  "answer": "discovery",
+  "game": "MX Offroad Master",
+  "at": "2026-09-30T16:15"
+ },
+ {
+  "stem": "A rectangle is 7 cm long and 4 cm wide. What is its area?",
+  "topic": "Geometry",
+  "subject": "maths",
+  "correct": true,
+  "answer": "28 sq cm",
+  "game": "Bubble Shooter",
+  "at": "2026-09-30T16:08"
+ },
+ {
+  "stem": "What is the OPPOSITE of \"ancient\"?",
+  "topic": "Vocabulary",
+  "subject": "english",
+  "correct": true,
+  "answer": "modern",
+  "game": "Moto X3M",
+  "at": "2026-09-30T16:05"
+ },
+ {
+  "stem": "Which fraction is the same as one half?",
+  "topic": "Fractions",
+  "subject": "maths",
+  "correct": true,
+  "answer": "2/4",
+  "game": "Traffic Cop 3D",
+  "at": "2026-09-30T15:58"
+ },
+ {
+  "stem": "What is the plural of \"child\"?",
+  "topic": "Grammar",
+  "subject": "english",
+  "correct": true,
+  "answer": "children",
+  "game": "Pottery Master",
+  "at": "2026-09-30T15:47"
+ },
+ {
+  "stem": "What is 6 times 7?",
+  "topic": "Multiplication",
+  "subject": "maths",
+  "correct": true,
+  "answer": "42",
+  "game": "MX Offroad Master",
+  "at": "2026-09-30T15:40"
+ },
+ {
+  "stem": "What does \"reluctant\" mean?",
+  "topic": "Vocabulary",
+  "subject": "english",
+  "correct": true,
+  "answer": "unwilling",
+  "game": "Bubble Shooter",
+  "at": "2026-09-30T15:36"
+ },
+ {
+  "stem": "A book costs $8. You pay with a $20 note. How much change do you get?",
+  "topic": "Money",
+  "subject": "maths",
+  "correct": true,
+  "answer": "$12",
+  "game": "Moto X3M",
+  "at": "2026-09-30T15:26"
+ },
+ {
+  "stem": "Which one is a complete sentence?",
+  "topic": "Sentences",
+  "subject": "english",
+  "correct": false,
+  "answer": "The dog barked loudly.",
+  "game": "Traffic Cop 3D",
+  "at": "2026-09-30T15:19"
+ },
+ {
+  "stem": "A square has sides of 5 cm. What is its perimeter?",
+  "topic": "Perimeter",
+  "subject": "maths",
+  "correct": true,
+  "answer": "20 cm",
+  "game": "Pottery Master",
+  "at": "2026-09-30T15:16"
+ },
+ {
+  "stem": "Choose the correct word: \"She ____ to school every day.\"",
+  "topic": "Grammar",
+  "subject": "english",
+  "correct": false,
+  "answer": "goes",
+  "game": "MX Offroad Master",
+  "at": "2026-09-30T15:09"
+ },
+ {
+  "stem": "What is 3/8 plus 2/8?",
+  "topic": "Fractions",
+  "subject": "maths",
+  "correct": false,
+  "answer": "5/8",
+  "game": "Bubble Shooter",
+  "at": "2026-09-30T15:01"
+ },
+ {
+  "stem": "Puppy is to dog as kitten is to ____?",
+  "topic": "Analogies",
+  "subject": "english",
+  "correct": true,
+  "answer": "cat",
+  "game": "Moto X3M",
+  "at": "2026-09-30T14:54"
+ },
+ {
+  "stem": "Round 47 to the nearest ten.",
+  "topic": "Rounding",
+  "subject": "maths",
+  "correct": true,
+  "answer": "50",
+  "game": "Traffic Cop 3D",
+  "at": "2026-09-30T14:44"
+ },
+ {
+  "stem": "Which sentence needs a question mark?",
+  "topic": "Punctuation",
+  "subject": "english",
+  "correct": true,
+  "answer": "Where are you going",
+  "game": "Pottery Master",
+  "at": "2026-09-30T14:36"
+ },
+ {
+  "stem": "What is 1.5 plus 2.75?",
+  "topic": "Decimals",
+  "subject": "maths",
+  "correct": true,
+  "answer": "4.25",
+  "game": "MX Offroad Master",
+  "at": "2026-09-30T14:30"
+ },
+ {
+  "stem": "What number comes next: 3, 6, 9, 12, ____?",
+  "topic": "Patterns",
+  "subject": "maths",
+  "correct": true,
+  "answer": "15",
+  "game": "Bubble Shooter",
+  "at": "2026-09-30T14:26"
+ },
+ {
+  "stem": "Which word means the OPPOSITE of \"generous\"?",
+  "topic": "Vocabulary",
+  "subject": "english",
+  "correct": true,
+  "answer": "selfish",
+  "game": "Moto X3M",
+  "at": "2026-09-30T14:16"
+ },
+ {
+  "stem": "24 stickers are shared equally among 4 friends. How many does each friend get?",
+  "topic": "Division",
+  "subject": "maths",
+  "correct": true,
+  "answer": "6",
+  "game": "Traffic Cop 3D",
+  "at": "2026-09-30T14:09"
+ },
+ {
+  "stem": "Which word is a VERB in this sentence: \"The dog barked loudly.\"",
+  "topic": "Grammar",
+  "subject": "english",
+  "correct": true,
+  "answer": "barked",
+  "game": "Pottery Master",
+  "at": "2026-09-30T14:05"
+ },
+ {
+  "stem": "A movie starts at 3:15 and lasts 45 minutes. When does it end?",
+  "topic": "Time",
+  "subject": "maths",
+  "correct": true,
+  "answer": "4:00",
+  "game": "MX Offroad Master",
+  "at": "2026-09-30T13:55"
+ },
+ {
+  "stem": "\"Maya grabbed her umbrella and raincoat before leaving.\" What is the weather most likely to be?",
+  "topic": "Reading",
+  "subject": "english",
+  "correct": true,
+  "answer": "Rainy",
+  "game": "Bubble Shooter",
+  "at": "2026-09-30T13:50"
+ },
+ {
+  "stem": "In the number 4,582, what is the value of the 5?",
+  "topic": "Place Value",
+  "subject": "maths",
+  "correct": true,
+  "answer": "500",
+  "game": "Moto X3M",
+  "at": "2026-09-30T13:42"
+ },
+ {
+  "stem": "Which word is spelled correctly?",
+  "topic": "Spelling",
+  "subject": "english",
+  "correct": true,
+  "answer": "friend",
+  "game": "Traffic Cop 3D",
+  "at": "2026-09-30T13:37"
+ },
+ {
+  "stem": "How many sides does a hexagon have?",
+  "topic": "Geometry",
+  "subject": "maths",
+  "correct": true,
+  "answer": "6",
+  "game": "Pottery Master",
+  "at": "2026-09-30T13:26"
+ },
+ {
+  "stem": "Which is a compound word?",
+  "topic": "Compound Words",
+  "subject": "english",
+  "correct": true,
+  "answer": "sunflower",
+  "game": "MX Offroad Master",
+  "at": "2026-09-30T13:24"
+ },
+ {
+  "stem": "Which fraction is the biggest?",
+  "topic": "Fractions",
+  "subject": "maths",
+  "correct": false,
+  "answer": "1/2",
+  "game": "Bubble Shooter",
+  "at": "2026-09-30T13:13"
+ }
+]
