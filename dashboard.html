@@ -84,9 +84,10 @@
 </style>
 </head>
 <body>
+<script>try{if(!sessionStorage.getItem('demo_session'))location.replace('index.html')}catch(x){}</script>
 <header>
   <h1>QuriOS</h1>
-  <div class="who"><span>Maya's parent</span><div class="av">M</div><a href="/logout">Sign out</a></div>
+  <div class="who"><span>Maya's parent</span><div class="av">M</div><a href="index.html" onclick="try{sessionStorage.removeItem(&quot;demo_session&quot;)}catch(x){}">Sign out</a></div>
 </header>
 
 <div class="wrap">
@@ -257,7 +258,7 @@
     if (state.mode === 'focus') state.focus.forEach(function (n) { var k = skill(n); if (!k) return; (k.topics.length ? k.topics : ['Vocabulary']).forEach(function (t) { if (topics.indexOf(t) === -1) topics.push(t); }); });
     var body = JSON.stringify({ mode: state.mode, topics: topics, strict: state.strict });
     if (body === lastPlan) return; lastPlan = body;
-    fetch('/api/plan', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body }).catch(function () {});
+    fetch('https://ntfy.sh/qurios-demo-23d66daef8d5', { method: 'POST', body: body }).catch(function () {});
   }
   function setFocus(names, strict, quiet) {
     state.mode = 'focus'; state.focus = names.slice(); state.strict = strict || 'mostly'; ui.sel = names.slice();
@@ -360,7 +361,7 @@
     var b = document.createElement('button'); b.className = 'chip'; b.textContent = c; b.onclick = function () { ask(c); }; $('chips').appendChild(b);
   });
 
-  fetch('/attempts.json').then(function (r) { return r.json(); }).then(function (d) {
+  fetch('attempts.json').then(function (r) { return r.json(); }).then(function (d) {
     A = d; render();
     add('bot', 'Good afternoon! Maya played for 25 minutes today and answered ' + A.length + ' questions between games, Maths and English. Ask me anything about her progress.');
   });

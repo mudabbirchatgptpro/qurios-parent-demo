@@ -21,7 +21,7 @@
 </style>
 </head>
 <body>
-<form class="box" method="post" action="/login">
+<form class="box" id="f">
   <h1>QuriOS</h1>
   <p class="sub">Parent portal · sign in</p>
   <div id="err" class="err" hidden>That email and password don't match.</div>
@@ -30,6 +30,16 @@
   <button type="submit">Sign in</button>
   <div class="hint">Demo account · sample data only</div>
 </form>
-<script>if (location.search.indexOf('error=1') !== -1) document.getElementById('err').hidden = false;</script>
+<script>
+// Demo-only sign-in: sample data, no real accounts.
+document.getElementById('f').onsubmit = function (e) {
+  e.preventDefault();
+  var f = e.target;
+  if (f.email.value.trim().toLowerCase() === 'parent@qurios.demo' && f.password.value === 'hoot2026') {
+    try { sessionStorage.setItem('demo_session', '1'); } catch (x) {}
+    location.href = 'dashboard.html';
+  } else document.getElementById('err').hidden = false;
+};
+</script>
 </body>
 </html>
